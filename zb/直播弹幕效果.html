@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <link rel="stylesheet" href="css\tz.css">
+    <style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    html,body{
+        height: 100%;
+        user-select: none;
+    }
+    .screen{
+        overflow: hidden;
+        height: 100%;
+        position: relative;
+        background-color:rgba(0,0,0,.8);
+    }
+    .send{
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 80px;
+        line-height: 80px;
+        background-color: rgba(0,0,0,.8);
+        text-align: center;
+    }
+    .input{
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        margin: -20px -350px;
+        font-size: 0;
+    }
+    .text{
+        float: left;
+        width: 600px;
+        height: 40px;
+        border: none;
+        border-radius: 5px 0 0 5px;
+        outline: none;
+    }
+    .btn{
+        float: left;
+        width: 100px;
+        background-color: #65c33d;
+        line-height: 40px;
+        font-size: 16px;
+        color: #fff;
+        cursor: pointer;
+    }
+    .s_show div{
+        position: absolute;
+        font-size: 24px;
+        font-weight: bold;
+    }
+    </style>
+</head>
+<body>
+    <div class="screen">
+        <div class="cont">
+            <video autoplay="autoplay"  muted width="100%" src="video\abc.mp4"></video>
+        </div>
+        <div class="send">
+            <div class="input">
+                <input type="text" class="text">
+                <div class="btn">发送弹幕</div>
+            </div>
+        </div>
+        <div class="s_show">
+            <div class="magictime foolishIn">张歌真的帅</div>
+            <div class="magictime twisterInUp">不是一般的帅</div>
+            <div class="magictime swashIn">我爱死你了</div>
+            <div class="magictime vanishIn">赶紧起来学习</div>
+            <div class="magictime slideRightRetourn ">快点！！！</div>
+            <div class="magictime swashIn">磨叽什么</div>
+            <div class="magictime slideUpRetourn">干就完了</div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var arrDm = document.querySelectorAll('.s_show div'),
+            osend = document.querySelector('.send'),
+            otxt = document.querySelector('.text'),
+            obtn = document.querySelector('.btn'),
+            oshow = document.querySelector('.s_show');
+            document.getElementsByClassName
+        
+        //弹幕设置点击发送：
+        obtn.onclick =function(){
+            // var odiv = document.createElement('div');
+            // odiv.innerHTML = otxt.value;
+            // odiv.className = "magictime vanishIn";
+            // oshow.appendChild(odiv);
+            // otxt.value = "";
+            // init(odiv);
+            fscont();
+        }
+        function fscont(){
+            var odiv = document.createElement('div');
+            odiv.innerHTML = otxt.value;
+            odiv.className = "magictime vanishIn";
+            oshow.appendChild(odiv);
+            otxt.value = "";
+            init(odiv);
+        }
+        //键盘事件：
+        otxt.onkeydown = function(eve){
+            var e = eve || window.event;
+            if(e.keyCode == 13){
+                fscont();
+            }
+        }
+        //遍历弹幕：
+        for(var i=0;i<arrDm.length;i++){
+            init(arrDm[i]);
+        }
+        //弹幕设置：初始化
+        function init(obj){
+            var screenHeight = document.documentElement.clientHeight,//获取屏幕高度
+                screenWidth = document.documentElement.clientWidth,//获取屏幕宽度
+                sendHeight = osend.clientHeight, //发送栏的高度
+                maxTop = screenHeight- sendHeight-obj.clientHeight,
+                maxLeft = screenWidth - obj.clientWidth;
+                obj.style.top = Math.random()*maxTop+"px";
+                obj.style.left = Math.random()*maxLeft+"px";
+                obj.style.color = randomColor(); 
+                move(obj,maxLeft);
+        }
+        //弹幕移动：
+        function move(obj,maxLeft){
+            maxLeft -= 2;
+            if(maxLeft>-obj.clientWidth){
+                obj.style.left = maxLeft + 'px';
+                requestAnimationFrame(function(){
+                move(obj,maxLeft);
+                }); //h5新增属性，相当于定时器
+            }else{
+                oshow.removeChild(obj);//最大左边距超过弹幕本身长度就删除此条弹幕
+            }    
+        }
+        //随机颜色设置：
+        function randomColor(){
+            return '#'+(Math.random()*16).toString(16).slice(-6);
+            // var color = '#';
+            // for(var i=0;i<6;i++){
+            //     color += Math.floor(Math.random()*16).toString(16);
+            // }
+            // return color;
+        }
+    </script>
+</body>
+</html>
